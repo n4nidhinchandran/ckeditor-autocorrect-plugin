@@ -517,11 +517,20 @@
 
 				beforeReplace();
 				var bookmark = cursor.createBookmark();
-				replaceRangeContent(matchRange, replacement);
+				var nrepflag = replacement.search("http");
+				if(nrepflag>=0){
+					var attributes = {href: replacement};
+					var style = new CKEDITOR.style({ element: 'a', attributes: attributes } );
+					style.type = CKEDITOR.STYLE_INLINE;
+					style.applyToRange( matchRange );
+					replaceRangeContent(matchRange, match);
+				}
+				else if(nrepflag==-1){
+				  	replaceRangeContent(matchRange, replacement);
+				}
 				cursor.moveToBookmark(bookmark);
 				moveCursorIntoTextNode(cursor);
 				afterReplace();
-
 				return true;
 			}
 
@@ -959,7 +968,7 @@
  */
 CKEDITOR.config.autocorrect_enabled = true;
 // language specific
-CKEDITOR.config.autocorrect_replacementTable = {"-->": "→", "-+": "∓", "->": "→", "...": "…", "(c)": "©", "(e)": "€", "(r)": "®", "(tm)": "™", "(o)": "˚", "+-": "±", "<-": "←", "<--": "←", "<-->": "↔", "<->": "↔", "<<": "«", ">>": "»", "~=": "≈", "1/2": "½", "1/4": "¼", "3/4": "¾"};
+CKEDITOR.config.autocorrect_replacementTable = {"-->": "→", "-+": "∓", "->": "→", "...": "…", "(c)": "©", "(e)": "€", "(r)": "®", "(tm)": "™", "(o)": "˚", "+-": "±", "<-": "←", "<--": "←", "<-->": "↔", "<->": "↔", "<<": "«", ">>": "»", "~=": "≈", "1/2": "½", "1/4": "¼", "3/4": "¾", "Google": "http://www.google.com"};
 
 CKEDITOR.config.autocorrect_useReplacementTable = true;
 
